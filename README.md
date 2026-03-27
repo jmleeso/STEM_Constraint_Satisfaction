@@ -1,6 +1,6 @@
 # STEM_Constraint_Satisfaction
 
-# [Paper Title: Error-Guaranteed Compression with Preservation of Downstream Quantities for Electron Microscopy]
+# Paper Title: Error-Guaranteed Compression with Preservation of Downstream Quantities for Electron Microscopy
 
 This repository contains the official implementation of the Constraint Satisfaction (CS) solver presented in our paper: **"Error-Guaranteed Compression with Preservation of Downstream Quantities for Electron Microscopy"**. 
 
