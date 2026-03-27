@@ -11,6 +11,8 @@ from emdfile import tqdmnd
 import matplotlib
 matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
+from matplotlib.colors import SymLogNorm
+from matplotlib.ticker import FuncFormatter
 from utils import load_swift_to_py4DSTEM
 
 import h5py
@@ -324,6 +326,44 @@ def run_dpc(dataset, energy, out_path, filename='original', device='cpu'):
     plt.close('all')
 
     return dpc._com_x, dpc._com_y, dpc.object_phase
+
+def QoI_original_and_residual_plot(qoi_original, qoi_recon, qoi_recon_correct, out_path, analysis_name='vbf'):
+    data1 = qoi_original - qoi_recon
+    data2 = qoi_original - qoi_recon_correct
+    
+    vmin = min(data1.min(), data2.min())
+    vmax = max(data1.max(), data2.max())
+    
+    linthresh = 1e-1
+    norm = SymLogNorm(linthresh=linthresh, vmin=vmin, vmax=vmax, base=10)
+    
+    fig, axes = plt.subplots(1, 3, figsize=(14, 4.5), 
+                         gridspec_kw={'wspace': 0.05}, 
+                         layout='constrained')
+    
+    im0 = axes[0].imshow(qoi_original, origin='upper')
+    axes[0].set_title(f'{analysis_name.capitalize()} Original', fontsize=15, fontweight='bold')
+    axes[0].axis('off')
+    
+    im1 = axes[1].imshow(data1, cmap='RdBu_r', origin='upper', norm=norm)
+    axes[1].set_title(f'{analysis_name.capitalize()} Residual - Before CS', fontsize=15, fontweight='bold')
+    axes[1].axis('off')
+    
+    im2 = axes[2].imshow(data2, cmap='RdBu_r', origin='upper', norm=norm)
+    axes[2].set_title(f'{analysis_name.capitalize()} Residual - After CS', fontsize=15, fontweight='bold')
+    axes[2].axis('off')
+    
+    cbar = fig.colorbar(im2, ax=axes[2], shrink=0.9, pad=0.05)
+    cbar.set_label('Intensity (Log Scale)', rotation=270, labelpad=20, fontsize=16, fontweight='bold')
+    cbar.ax.tick_params(labelsize=12)
+    
+    for label in cbar.ax.get_yticklabels():
+        label.set_fontweight('bold')
+        
+    fig = plt.gcf()
+    fig.savefig(f'{out_path.parent}/{analysis_name}_original_residuals.png', bbox_inches='tight')
+    plt.clf()
+    plt.close('all')
     
 
 def main():
@@ -446,8 +486,9 @@ def main():
                 dtype=torch_dtype 
         )
 
-    recon_correct_nrmse = compute_nrmse(dataset.data, recon_correct)
-    print('###### End CS Solver ######\n')
+    print('###### End CS Solver and store CS-corrected output ######\n')
+    # Compute NRMSE after CS
+    recon_correct_nrmse = compute_nrmse(dataset.data, recon_correct)    
     # Store corrected recon
     np.save(out_path, recon_correct)
 
@@ -466,6 +507,11 @@ def main():
     vbf_recon_correct = run_vbf(dataset, probe_qx0, probe_qy0, probe_radius_pixels, out_path, 'recon_after_cs')
     dpc_com_x_recon_correct, dpc_com_y_recon_correct, dpc_object_phase_recon_correct = run_dpc(dataset, energy, out_path=out_path, filename='recon_after_cs', device='cpu')
 
+    QoI_original_and_residual_plot(vbf_orig, vbf_recon, vbf_recon_correct, out_path, analysis_name='vbf')
+    #QoI_original_and_residual_plot(dpc_com_x_orig, dpc_com_x_recon, dpc_com_x_recon_correct, out_path, analysis_name='dpc_com_x')
+    #QoI_original_and_residual_plot(dpc_com_y_orig, dpc_com_y_recon, dpc_com_y_recon_correct, out_path, analysis_name='dpc_com_y')
+    QoI_original_and_residual_plot(dpc_object_phase_orig, dpc_object_phase_recon, dpc_object_phase_recon_correct, out_path, analysis_name='dpc_phase')
+
     # Compute NRMSEs
     vbf_recon_nrmse = compute_nrmse(vbf_orig, vbf_recon)
     dpc_com_x_recon_nrmse = compute_nrmse(dpc_com_x_orig, dpc_com_x_recon)
@@ -475,7 +521,7 @@ def main():
     dpc_com_x_recon_correct_nrmse = compute_nrmse(dpc_com_x_orig, dpc_com_x_recon_correct)
     dpc_com_y_recon_correct_nrmse = compute_nrmse(dpc_com_y_orig, dpc_com_y_recon_correct)
     dpc_object_phase_recon_correct_nrmse = compute_nrmse(dpc_object_phase_orig, dpc_object_phase_recon_correct)
-    print(f'###### Output  ######')
+    print(f'###### VBF and DPC images are stored in {out_path.parent} ######')
     print('###### End VBF and DPC Computation ######\n')
 
     print('======== Final NRMSE Results =======')

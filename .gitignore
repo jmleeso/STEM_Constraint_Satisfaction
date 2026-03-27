@@ -1,3 +1,10 @@
+# Raw data files
+data/*
+!data/U100_calibratoins.hdf5
+!data/metadata.json
+output/
+bk/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/    
 *.py[codz]
