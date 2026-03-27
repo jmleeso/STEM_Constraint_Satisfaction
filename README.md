@@ -18,7 +18,7 @@ To keep the repository simple and easy to run, all core scripts are located in t
 
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/](https://github.com/)[jmleeso]/[STEM_Constraint_Satisfaction].git
+   git clone https://github.com/jmleeso/STEM_Constraint_Satisfaction.git
    cd STEM_Constraint_Satisfaction
    ```
 2. Install the required dependencies. Note that `py4DSTEM` version `0.14.9` is strictly required for compatibility:
