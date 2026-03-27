@@ -1,0 +1,19 @@
+# 1. 데이터 폴더 설정
+# data 폴더 안의 모든 파일을 무시합니다. (16GB 데이터 파일들 포함)
+data/*
+# 단, 아래 지정된 파일들은 예외로 하여 업로드에 포함시킵니다.
+!data/U100_calibratoins.hdf5
+!data/metadata.json
+
+# 2. 테스트 아웃풋 폴더 제외
+# 코드에서 기본 출력 경로로 사용된 output 폴더 전체를 무시합니다.
+output/
+bk/
+
+# 3. Python 기본 생성 파일 및 OS 임시 파일 제외 (권장 사항)
+__pycache__/
+*.py[cod]
+*$py.class
+.DS_Store
+Thumbs.db
+.ipynb_checkpoints/
