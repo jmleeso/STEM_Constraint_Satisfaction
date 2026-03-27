@@ -1,0 +1,7 @@
+numpy
+torch
+tqdm
+matplotlib
+h5py
+emdfile
+py4DSTEM==0.14.9
