@@ -4,5 +4,4 @@ tqdm
 matplotlib
 h5py
 emdfile
-gdown
 py4DSTEM==0.14.9
