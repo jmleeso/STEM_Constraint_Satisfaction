@@ -30,8 +30,24 @@ To keep the repository simple and easy to run, all core scripts are located in t
 
 Place your sample 4D-STEM data and calibration files in the `data/` directory. By default, the scripts expect the following file to exist:
 * Calibration file: `./data/U100_calibratoins.hdf5`
+* Metadata to load the original data: `./data/metadata.json`
 
 *Note: For a quick start, we provide cropped/sampled 4D-STEM data in the `data/` folder. The original D1 dataset and its sample decompressed data by MGARD used in the paper can be downloaded from [Link].*
+
+## Data Preparation
+
+Place your sample 4D-STEM data and calibration files in the `data/` directory. By default, the scripts expect the following files to exist:
+* Calibration file: `./data/U100_calibratoins.hdf5`
+* Metadata to load the original data: `./data/metadata.json`
+
+### Downloading the Full Dataset
+
+The original D1 dataset (approx. 16GB) and its sample decompressed data (compressed by MGARD with a compression ratio of 27.8) used in the paper are hosted securely on Dropbox.
+We provide a Python script to download the sample datasets into the `./data` directory. Run the following command:
+
+```bash
+python download_sample_data.py
+```
 
 ## Usage
 
@@ -55,7 +71,7 @@ python CS_solver.py <path_to_original_data_dir> <path_to_decompressed_file.npy> 
 The script will automatically compute the NRMSE for VBF and DPC to verify the correction performance and save the visualization results in the output directory.
 
 ### 2. Evaluating Error Metrics
-To compute the fluctuation baseline and validate the statistical error metrics (beta targets):
+To compute the fluctuation baseline and validate the statistical error metrics (beta targets) of decompressed data before CS and after CS:
 
 ```bash
 python Error_metric.py <path_to_original_data_dir> <path_to_decompressed_file.npy> <path_to_CS_output.npy> \
