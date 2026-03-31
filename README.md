@@ -28,14 +28,6 @@ To keep the repository simple and easy to run, all core scripts are located in t
 
 ## Data Preparation
 
-Place your sample 4D-STEM data and calibration files in the `data/` directory. By default, the scripts expect the following file to exist:
-* Calibration file: `./data/U100_calibratoins.hdf5`
-* Metadata to load the original data: `./data/metadata.json`
-
-*Note: For a quick start, we provide cropped/sampled 4D-STEM data in the `data/` folder. The original D1 dataset and its sample decompressed data by MGARD used in the paper can be downloaded from [Link].*
-
-## Data Preparation
-
 Place your sample 4D-STEM data and calibration files in the `data/` directory. By default, the scripts expect the following files to exist:
 * Calibration file: `./data/U100_calibratoins.hdf5`
 * Metadata to load the original data: `./data/metadata.json`
